@@ -11,7 +11,7 @@ def calc_intersection(c1x, c1y, r1, c2x, c2y, r2, roundto):
             return[]
         raise ValueError("Same circle, infinite intersections")
 
-    if d > r1+r2 or d < abs(r1-r2):
+    if d > r1+r2 or d < abs(r1-r2): # if no intersections
         return[]
 
     l = (r1**2 - r2**2 + d**2) / (2*d)
@@ -20,7 +20,7 @@ def calc_intersection(c1x, c1y, r1, c2x, c2y, r2, roundto):
     xmid = c1x + l * dx/d
     ymid = c1y + l*dy/d
 
-    if h ==0:
+    if h ==0: # one intersection
         return[(xmid,ymid)]
 
     x1 = xmid + h * dy / d
