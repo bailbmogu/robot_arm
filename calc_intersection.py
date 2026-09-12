@@ -11,6 +11,9 @@ def calc_intersection(c1x, c1y, r1, c2x, c2y, r2, roundto):
             return[]
         raise ValueError("Same circle, infinite intersections")
 
+    if d > r1+r2 or d < abs(r1-r2):
+        return[]
+
     l = (r1**2 - r2**2 + d**2) / (2*d)
     h = math.sqrt(r1**2 -l**2)
 
@@ -41,5 +44,5 @@ if calc_intersection(-50, 50, 25, 50, 50, 30, 2) != []:
 if calc_intersection(100, 67, 55, 37, 31.4, 60, 1) != [(50.0, 90.0), (93.9, 12.3)]:
     print("test 4 failed")
 
-if calc_intersection(400, 800, 100, 400, 650, 50, 0) != [(400,700), (400,700)]:
+if calc_intersection(400, 800, 100, 400, 650, 50, 0) != [(400,700)]:
     print("test 5 failed")
