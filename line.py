@@ -1,4 +1,5 @@
 import pygame
+import math
 
 pygame.init()
 
@@ -6,7 +7,8 @@ disp_size = (800,800)
 
 ox = disp_size[0]//2
 oy = disp_size[1]-1
-pygame.draw.line(pygame.display.set_mode((800, 800)),(255,0,0), (ox,oy), (ox,oy+100), 10)
+screen = pygame.display.set_mode((800, 800))
+pygame.draw.line((screen),(255,0,0), (ox,oy), (ox,oy+100), 10)
 pygame.display.flip()
 running = True
 while running:
@@ -19,5 +21,9 @@ while running:
             mousepos = event.pos
             pygame.draw.line(pygame.display.set_mode((800, 800)),(255,0,0), (ox,oy), (mousepos), 10)
             pygame.display.flip()
+            dx = mousepos[0] - ox
+            dy = mousepos[1] - oy
+            angle = math.degrees(math.atan2(dy,dx))
+            print(f"Angle: {angle} degrees")
 
 pygame.quit()
