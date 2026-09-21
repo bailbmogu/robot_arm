@@ -3,27 +3,37 @@ import math
 
 pygame.init()
 
-disp_size = (800,800)
+disp_size = (800, 800) 
+ox = disp_size[0] // 2
+oy = disp_size[1] - 1
+arm_length = 150
+screen = pygame.display.set_mode(disp_size)
 
-ox = disp_size[0]//2
-oy = disp_size[1]-1
-screen = pygame.display.set_mode((800, 800))
-pygame.draw.line((screen),(255,0,0), (ox,oy), (ox,oy+100), 10)
-pygame.display.flip()
+def draw_arm(angle_rad):
+    end_x = ox + arm_length * math.cos(angle_rad)
+    end_y = oy + arm_length * math.sin(angle_rad)
+    screen.fill((0, 0, 0))
+    pygame.draw.line(screen, (255, 0, 0), (ox, oy), (end_x, end_y), 10)
+    pygame.display.flip()
+
+draw_arm(-math.pi / 2)
+
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        
+
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print(f"Mouse clicked at {event.pos}")
             mousepos = event.pos
-            pygame.draw.line(pygame.display.set_mode((800, 800)),(255,0,0), (ox,oy), (mousepos), 10)
-            pygame.display.flip()
+            print(f"Mouse clicked at {mousepos}")
+
             dx = mousepos[0] - ox
             dy = mousepos[1] - oy
-            angle = math.degrees(math.atan2(dy,dx))
-            print(f"Angle: {angle} degrees")
+            angle_rad = math.atan2(dy, dx)
+            angle_deg = math.degrees(angle_rad)
+            print(f"Angle: {angle_deg} degrees")
+
+            draw_arm(angle_rad)
 
 pygame.quit()
