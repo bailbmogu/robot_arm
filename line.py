@@ -8,13 +8,26 @@ ox = disp_size[0] // 2
 oy = disp_size[1] - 1
 arm_length = 150
 current_angle = -math.pi / 2
+clicked_pos = (0, 0)
 screen = pygame.display.set_mode(disp_size)
+font = pygame.font.SysFont(None, 32)
 
 def draw_arm(angle_rad):
     end_x = ox + arm_length * math.cos(angle_rad)
     end_y = oy + arm_length * math.sin(angle_rad)
     screen.fill((0, 0, 0))
     pygame.draw.line(screen, (255, 0, 0), (ox, oy), (end_x, end_y), 10)
+    angle_deg = math.degrees(angle_rad)
+    lines = [
+        f"jayren",
+        f"angle: {angle_deg:.0f}",
+        f"clicked x,y = {clicked_pos[0]}, {clicked_pos[1]}",
+        f"arm x,y = {end_x:.0f}, {end_y:.0f}",
+        f"arm length: {arm_length}"
+    ]
+    for i, line in enumerate(lines):
+        text = font.render(line, True, (0, 255, 0))
+        screen.blit(text, (20, 20 + i * 35))
     pygame.display.flip()
 
 draw_arm(current_angle)
@@ -28,6 +41,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             mousepos = event.pos
             print(f"Mouse clicked at {mousepos}")
+            clicked_pos = mousepos
 
             dx = mousepos[0] - ox
             dy = mousepos[1] - oy
