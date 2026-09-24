@@ -6,31 +6,13 @@ pygame.init()
 disp_size = (800, 800) 
 ox = disp_size[0] // 2
 oy = disp_size[1] - 1
-arm_length = 150
-current_angle = -math.pi / 2
 clicked_pos = (0, 0)
 screen = pygame.display.set_mode(disp_size)
 font = pygame.font.SysFont(None, 32)
+clock = pygame.time.Clock()
 
-def draw_arm(angle_rad):
-    end_x = ox + arm_length * math.cos(angle_rad)
-    end_y = oy + arm_length * math.sin(angle_rad)
-    screen.fill((0, 0, 0))
-    pygame.draw.line(screen, (255, 0, 0), (ox, oy), (end_x, end_y), 10)
-    angle_deg = math.degrees(angle_rad)
-    lines = [
-        f"jayren",
-        f"angle: {angle_deg:.0f}",
-        f"clicked x,y = {clicked_pos[0]}, {clicked_pos[1]}",
-        f"arm x,y = {end_x:.0f}, {end_y:.0f}",
-        f"arm length: {arm_length}"
-    ]
-    for i, line in enumerate(lines):
-        text = font.render(line, True, (0, 255, 0))
-        screen.blit(text, (20, 20 + i * 35))
-    pygame.display.flip()
-
-draw_arm(current_angle)
+state = 0
+timer = 0
 
 running = True
 while running:
@@ -38,25 +20,64 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and state == 0:
             mousepos = event.pos
             print(f"Mouse clicked at {mousepos}")
             clicked_pos = mousepos
 
-            dx = mousepos[0] - ox
-            dy = mousepos[1] - oy
-            current_angle = math.atan2(dy, dx)
-            angle_deg = math.degrees(current_angle)
-            print(f"Angle: {angle_deg} degrees")
+            state = 1
+            timer = 0
+    screen.fill((0, 0, 0))
 
-            draw_arm(current_angle)
+    if state == 1:
+        for i in range(10):
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                arm_length += 10
-                draw_arm(current_angle)
-            if event.key == pygame.K_DOWN:
-                arm_length = max(10, arm_length - 10)
-                draw_arm(current_angle)
+            start = i * 4
+            if start <= timer < start + 20:
+                t = i / 9
+                x = ox + (clicked_pos[0] - ox) * t
+                y = oy + (clicked_pos[1] - oy) * t
+
+
+                pygame.draw.rect(screen, (255, 255, 0), (x - 10, y - 10, 20, 20))
+        if timer > 9 * 4 + 20:
+            state = 2
+            timer = 0
+
+    elif state == 2:
+        r = int(5 * 10 * timer / 60)
+        if r > 0:
+
+
+            pygame.draw.circle(screen, (0, 200, 255), clicked_pos, r, 3)
+        if timer >= 60:
+            state = 3
+
+            timer = 0
+    elif state == 3:
+
+        r = int(50 - 4 * 10 * timer / 48)
+        if r > 0:
+            
+            pygame.draw.circle(screen, (255, 100, 255), clicked_pos, r, 3)
+
+        if timer >= 48:
+
+
+            state = 0
+            timer = 0
+    timer += 1
+
+
+    lines = [
+        f"jayren",
+        f"state: {state}",
+        f"clicked x,y = {clicked_pos[0]}, {clicked_pos[1]}"
+    ]
+    for i, line in enumerate(lines):
+        text = font.render(line, True, (0, 255, 0))
+        screen.blit(text, (20, 20 + i * 35))
+    pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
