@@ -38,23 +38,29 @@ disp_size = (800, 800)
 ox = disp_size[0] // 2
 oy = disp_size[1] - 1
 arm_length = 150
+arm2_length = 100
 
 a1 = math.pi / 2
+a2 = math.pi / 2
 clicked_pos = (0, 0)
 
 has_clicked = False
 screen = pygame.display.set_mode(disp_size)
 font = pygame.font.SysFont(None, 32)
 
-def draw_arm(a1_rad):
+def draw_arm(a1_rad, a2_rad):
     end_x = ox - arm_length * math.cos(a1_rad)
     end_y = oy - arm_length * math.sin(a1_rad)
+    end2_x = end_x - arm2_length * math.cos(a2_rad)
+    end2_y = end_y - arm2_length * math.sin(a2_rad)
     screen.fill((0, 0, 0))
     pygame.draw.line(screen, (255, 0, 0), (ox, oy), (end_x, end_y), 10)
+    pygame.draw.line(screen, (0, 150, 255), (end_x, end_y), (end2_x, end2_y), 10)
     if has_clicked:
         pygame.draw.line(screen, (0, 255, 0), (clicked_pos[0] - 10, clicked_pos[1] - 10), (clicked_pos[0] + 10, clicked_pos[1] + 10), 3)
         pygame.draw.line(screen, (0, 255, 0), (clicked_pos[0] - 10, clicked_pos[1] + 10), (clicked_pos[0] + 10, clicked_pos[1] - 10), 3)
     a1_deg = math.degrees(a1_rad)
+    a2_deg = math.degrees(a2_rad)
     lines = [
         f"jayren",
         f"a1: {a1_deg:.0f}",
@@ -67,7 +73,7 @@ def draw_arm(a1_rad):
         screen.blit(text, (20, 20 + i * 35))
     pygame.display.flip()
 
-draw_arm(a1)
+draw_arm(a1, a2)
 
 running = True
 while running:
@@ -87,14 +93,14 @@ while running:
             a1_deg = math.degrees(a1)
             print(f"a1: {a1_deg} degrees")
 
-            draw_arm(a1)
+            draw_arm(a1, a2)
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 arm_length += 10
-                draw_arm(a1)
+                draw_arm(a1, a2)
             if event.key == pygame.K_DOWN:
                 arm_length = max(10, arm_length - 10)
-                draw_arm(a1)
+                draw_arm(a1, a2)
 
 pygame.quit()
