@@ -59,8 +59,8 @@ def draw_arm(a1_rad, a2_rad):
     if has_clicked:
         pygame.draw.line(screen, (0, 255, 0), (clicked_pos[0] - 10, clicked_pos[1] - 10), (clicked_pos[0] + 10, clicked_pos[1] + 10), 3)
         pygame.draw.line(screen, (0, 255, 0), (clicked_pos[0] - 10, clicked_pos[1] + 10), (clicked_pos[0] + 10, clicked_pos[1] - 10), 3)
-    a1_deg = math.degrees(a1_rad)
-    a2_deg = math.degrees(a2_rad)
+    a1_deg = 180-math.degrees(a1_rad)
+    a2_deg = 180-math.degrees(a2_rad)
     lines = [
         f"jayren",
         f"a1: {a1_deg:.0f}",
@@ -101,6 +101,12 @@ while running:
                 draw_arm(a1, a2)
             if event.key == pygame.K_DOWN:
                 arm_length = max(10, arm_length - 10)
+                draw_arm(a1, a2)
+            if event.key == pygame.K_RIGHT:
+                arm2_length += 10
+                draw_arm(a1, a2)
+            if event.key == pygame.K_LEFT:
+                arm2_length = max(10, arm_length - 10)
                 draw_arm(a1, a2)
 
 pygame.quit()
