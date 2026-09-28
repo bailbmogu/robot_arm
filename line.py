@@ -106,7 +106,7 @@ while running:
                 arm2_length += 10
                 draw_arm(a1, a2)
             if event.key == pygame.K_LEFT:
-                arm2_length = max(10, arm_length - 10)
+                arm2_length = max(10, arm2_length - 10)
                 draw_arm(a1, a2)
 
 pygame.quit()
