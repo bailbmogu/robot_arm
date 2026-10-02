@@ -86,6 +86,16 @@ while running:
             print(f"Mouse clicked at {mousepos}")
             clicked_pos = mousepos
             has_clicked = True
+            solutions = calc_intersection(ox,oy,arm_length,clicked_pos[0],clicked_pos[1], arm2_length, 6)
+            if solutions:
+                joint_x, joint_y = solutions[0]
+                a1 = math.atan2(oy-joint_y, ox-joint_x)
+                a2 = math.atan2(joint_y-clicked_pos[1], joint_x - clicked_pos[0])
+            else:
+                pygame.draw.line(screen, (255, 0, 0), (clicked_pos[0] - 10, clicked_pos[1] - 10), (clicked_pos[0] + 10, clicked_pos[1] + 10), 3)
+                pygame.draw.line(screen, (255, 0, 0), (clicked_pos[0] - 10, clicked_pos[1] + 10), (clicked_pos[0] + 10, clicked_pos[1] - 10), 3)
+                print("cant reach target")
+            draw_arm(a1,a2)
 
             dx = mousepos[0] - ox
             dy = mousepos[1] - oy
